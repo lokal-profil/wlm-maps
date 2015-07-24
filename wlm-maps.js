@@ -104,10 +104,17 @@ function init() {
     
     // create the map
     map = new L.Map('mapdiv', {
+        zoomControl: false,
         center: start,
         zoom: 5,
         layers: [layerOSM,layerMonuments]
     });
+    map.addControl(
+        L.control.zoom({
+            'zoomInTitle':'Zooma in',
+            'zoomOutTitle':'Zooma ut'
+        })
+    );
     L.control.scale().addTo(map);
     
     var baseLayers = {
@@ -124,6 +131,23 @@ function init() {
     map.addControl(osmGeocoder);
     var hash = new L.Hash(map);
     
+    // locate
+    L.control.locate({
+        position: 'topleft',  // set the location of the control
+        drawCircle: true,  // controls whether a circle is drawn that shows the uncertainty about the location
+        icon: 'fa fa-crosshairs',  // class for icon, fa-location-arrow or fa-map-marker
+        metric: true,  // use metric or imperial units
+        showPopup: true, // display a popup when the user click on the inner marker
+        strings: {
+            title: "Visa var jag är",  // title of the locate control
+            popup: "Du är inom {distance} meter från denna punkt",  // text to appear if user clicks on circle
+            outsideMapBoundsMsg: "Du verkar befinna dig utanför kartans gränser" // default message for onLocationOutsideMapBounds
+        },
+        locateOptions :{
+            maxZoom: 16
+        }
+    }).addTo(map);
+
     // sidebar
     sidebar = L.control.sidebar('sidebar', {
         position: 'left',
@@ -134,7 +158,7 @@ function init() {
         sidebar.show();
     }, 500);*/
     sidebar.setContent('<h1>Wiki Loves Monuments</h1>' +
-        '<p><b>Välkommen!</b> Detta är en karta för den fotografiska tävlingen <a href="https://commons.wikimedia.org/wiki/Commons:Wiki_Loves_Monuments_2014">Wiki Loves Monument 2014</a> (<a href="http://www.wikilovesmonuments.se">blogg</a>). Hitta kulturminnen i din närhet, ta fotografier och ladda upp dem!</p>' +
+        '<p><b>Välkommen!</b> Detta är en karta för den fotografiska tävlingen <a href="https://commons.wikimedia.org/wiki/Commons:Wiki_Loves_Monuments_2015">Wiki Loves Monument 2015</a> (<a href="http://www.wikilovesmonuments.se">blogg</a>). Hitta kulturminnen i din närhet, ta fotografier och ladda upp dem!</p>' +
         '<h3>Kartnyckel</h3>' +
         '<table border=0 width=300px>' +
         '<tr><td><img src="icons/withimageicon.png" /></td><td>Kulturminne med bild</td></tr>' +
