@@ -73,7 +73,8 @@ try {
         $imageCondition = "image != ''";
     }
     $sql = "SELECT country, lang, id, name, lat, lon, image, commonscat, " .
-           "monument_article, monument_random FROM monuments_all " .
+           "monument_article, municipality, address, source, monument_random " .
+           "FROM monuments_all " .
            "WHERE lon>=:left AND lon<=:right AND lat>=:bottom AND lat<=:top AND " .
            "country like 'se-%' AND " . $imageCondition . " " .
            "ORDER BY monument_random LIMIT " . $limit;
