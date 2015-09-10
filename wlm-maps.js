@@ -1,16 +1,16 @@
 /*
  * Original code: https://github.com/chillly/plaques/blob/master/example3.js
- * 
+ *
  * Created by Chris Hill <osm@raggedred.net> and contributors.
  * Adapted for Wiki Loves Monuments by Emijrp <emijrp@gmail.com>
- * 
+ *
  * This software and associated documentation files (the "Software") is
  * released under the CC0 Public Domain Dedication, version 1.0, as
  * published by Creative Commons. To the extent possible under law, the
  * author(s) have dedicated all copyright and related and neighboring
  * rights to the Software to the public domain worldwide. The Software is
  * distributed WITHOUT ANY WARRANTY.
- * 
+ *
  * If you did not receive a copy of the CC0 Public Domain Dedication
  * along with the Software, see
  * <http://creativecommons.org/publicdomain/zero/1.0/>
@@ -19,6 +19,7 @@
 var map;
 var layerOSM;
 var layerMonuments;
+var layerNopics;
 var withimageicon;
 var withoutimageicon;
 var fmis_withimageicon;
@@ -31,83 +32,87 @@ var arbetsl_withoutimageicon;
 $(document).ready(init);
 
 function init() {
-    var osmUrl='//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';    
+    var osmUrl='//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib='Map data &copy; <a href="//openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | <a href="https://commons.wikimedia.org/wiki/Commons:Monuments_database" target="_blank">Monuments database</a> by Wikipedia editors | <a href="https://github.com/lokal-profil/wlm-maps/tree/sweden" target="_blank">Source code</a> by <a href="https://en.wikipedia.org/wiki/User:Emijrp">emijrp</a> in GitHub';
-    
+
     withimageicon = L.icon({
         iconUrl: 'icons/withimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     withoutimageicon = L.icon({
         iconUrl: 'icons/withoutimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     bbr_withimageicon = L.icon({
         iconUrl: 'icons/BBRwithimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     bbr_withoutimageicon = L.icon({
         iconUrl: 'icons/BBRwithoutimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     fmis_withimageicon = L.icon({
         iconUrl: 'icons/FMISwithimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     fmis_withoutimageicon = L.icon({
         iconUrl: 'icons/FMISwithoutimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     arbetsl_withimageicon = L.icon({
         iconUrl: 'icons/Museumwithimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     arbetsl_withoutimageicon = L.icon({
         iconUrl: 'icons/Museumwithoutimageicon.png',
         iconSize: [32, 32],
         iconAnchor: [16, 31],
         popupAnchor: [0, -16]
     });
-    
+
     layerOSM = new L.TileLayer(osmUrl, {
-        minZoom: 2, 
-        maxZoom: 19, 
+        minZoom: 2,
+        maxZoom: 19,
         attribution: osmAttrib
     });
-    
+
     layerMonuments = L.geoJson(null, {
         pointToLayer: setMarker,
         }
     );
+    layerNopics = L.geoJson(null, {
+        pointToLayer: setMarker,
+        }
+    );
     var start = new L.LatLng(63.5, 16.9);
-    
+
     // create the map
     map = new L.Map('mapdiv', {
         zoomControl: false,
         center: start,
         zoom: 5,
-        layers: [layerOSM,layerMonuments]
+        layers: [layerOSM,layerMonuments,layerNopics]
     });
     map.addControl(
         L.control.zoom({
@@ -116,13 +121,14 @@ function init() {
         })
     );
     L.control.scale().addTo(map);
-    
+
     var baseLayers = {
         "OpenStreetMap": layerOSM
     };
 
     var overlays = {
-        "Monument": layerMonuments
+        "Minnesmärke (med bilder)": layerMonuments,
+        "Minnesmärke (utan bilder)": layerNopics
     };
 
     L.control.layers(baseLayers, overlays).addTo(map);
@@ -130,7 +136,7 @@ function init() {
     var osmGeocoder = new L.Control.OSMGeocoder(osmOptions);
     map.addControl(osmGeocoder);
     var hash = new L.Hash(map);
-    
+
     // locate
     L.control.locate({
         position: 'topleft',  // set the location of the control
@@ -174,13 +180,15 @@ function init() {
         '</ul>' +
         ''
         );
-    
+
     map.on('moveend', whenMapMoves);
-    askForMonuments();
+    askForMonuments('0');
+    askForMonuments('1');
 }
 
 function whenMapMoves(e) {
-    askForMonuments();
+    askForMonuments('0');
+    askForMonuments('1');
 }
 
 function setMarker(feature,latlng) {
@@ -245,19 +253,19 @@ function setMarker(feature,latlng) {
             icon = withoutimageicon;
         }
     }
-    var monument; 
+    var monument;
     monument=L.marker(latlng, {icon: icon});
     monument.bindPopup(popuptext, {minWidth: 300});
     return monument;
 }
 
-function askForMonuments() {
+function askForMonuments(withImages) {
     var mobile;
     mobile = '0';
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 800 && window.innerHeight <= 600) ) {
         mobile = '1';
     }
-    var data='bbox=' + map.getBounds().toBBoxString() + '&mobile=' + mobile;
+    var data='bbox=' + map.getBounds().toBBoxString() + '&mobile=' + mobile + '&withImages=' + withImages;
     document.getElementById('wait').style.display = 'block';
     $.ajax({
         url: 'ajaxmonuments.php',
@@ -268,7 +276,12 @@ function askForMonuments() {
 }
 
 function showMonuments(ajaxresponse) {
-    layerMonuments.clearLayers();
-    layerMonuments.addData(ajaxresponse);
+    if( ajaxresponse.withImages == '0' ) {
+        layerNopics.clearLayers();
+        layerNopics.addData(ajaxresponse);
+    }else{
+        layerMonuments.clearLayers();
+        layerMonuments.addData(ajaxresponse);
+    }
     document.getElementById('wait').style.display = 'none';
 }
