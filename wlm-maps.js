@@ -276,7 +276,7 @@ function askForMonuments(withImages) {
 }
 
 function showMonuments(ajaxresponse) {
-    if( ajaxresponse.get('withImage') == '0' ) {
+    if( ajaxresponse.withImages == '0' ) {
         layerNopics.clearLayers();
         layerNopics.addData(ajaxresponse);
     }else{

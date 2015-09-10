@@ -68,7 +68,7 @@ try {
     if ($mobile == '1'){
         $limit = 50;
     }
-    $imageCondition = "image == ''";
+    $imageCondition = "image = ''";
     if ($withImages == '1'){
         $imageCondition = "image != ''";
     }
@@ -95,7 +95,7 @@ try {
 $ajaxres=array(); // place to store the geojson result
 $features=array(); // array to build up the feature collection
 $ajaxres['type']='FeatureCollection';
-$ajaxres['withImage']=$withImages;
+$ajaxres['withImages']=$withImages;
 
 // go through the list adding each one to the array to be returned
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
