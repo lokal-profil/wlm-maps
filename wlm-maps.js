@@ -127,8 +127,8 @@ function init() {
     };
 
     var overlays = {
-        "MonumentsWithPic": layerMonuments,
-        "MonumentsWithoutPic": layerNopics
+        "Minnesmärke (med bilder)": layerMonuments,
+        "Minnesmärke (utan bilder)": layerNopics
     };
 
     L.control.layers(baseLayers, overlays).addTo(map);
