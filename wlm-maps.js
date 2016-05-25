@@ -196,7 +196,7 @@ function setMarker(feature,latlng) {
     popuptext = '<table border=0 width=300px>';
     if (feature.properties.monument_article)
     {
-        popuptext = popuptext + '<tr><td colspan=2><strong><a href="https://'+feature.properties.lang+'.wikipedia.org/wiki/'+feature.properties.monument_article+'" target="_blank">'+feature.properties.name+'</a></strong></td></tr>';
+        popuptext = popuptext + '<tr><td colspan=2><strong><a href="https://'+feature.properties.lang+'.'+feature.properties.project+'.org/wiki/'+feature.properties.monument_article+'" target="_blank">'+feature.properties.name+'</a></strong></td></tr>';
     }else{
         popuptext = popuptext + '<tr><td colspan=2><strong>'+feature.properties.name+'</strong></td></tr>';
     }

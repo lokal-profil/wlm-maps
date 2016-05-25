@@ -73,7 +73,7 @@ try {
         $imageCondition = "image != ''";
     }
     $sql = "SELECT country, lang, id, name, lat, lon, image, commonscat, " .
-           "monument_article, municipality, address, source, project" .
+           "monument_article, municipality, address, source, project " .
            "FROM monuments_all " .
            "WHERE lon>=:left AND lon<=:right AND lat>=:bottom AND lat<=:top AND " .
            "country like 'se-%' AND " . $imageCondition . " " .
