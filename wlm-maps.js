@@ -164,7 +164,7 @@ function init() {
         sidebar.show();
     }, 500);*/
     sidebar.setContent('<h1>Wiki Loves Monuments</h1>' +
-        '<p><b>Välkommen!</b> Detta är en karta för den fotografiska tävlingen <a href="https://commons.wikimedia.org/wiki/Commons:Wiki_Loves_Monuments_2015">Wiki Loves Monument 2015</a> (<a href="http://www.wikilovesmonuments.se">blogg</a>). Hitta kulturminnen i din närhet, ta fotografier och ladda upp dem!</p>' +
+        '<p><b>Välkommen!</b> Detta är en karta för den fotografiska tävlingen <a href="https://commons.wikimedia.org/wiki/Commons:Wiki_Loves_Monuments">Wiki Loves Monument</a> (<a href="http://www.wikilovesmonuments.se">blogg</a>). Hitta kulturminnen i din närhet, ta fotografier och ladda upp dem!</p>' +
         '<h3>Kartnyckel</h3>' +
         '<table border=0 width=300px>' +
         '<tr><td><img src="icons/withimageicon.png" /></td><td>Kulturminne med bild</td></tr>' +
