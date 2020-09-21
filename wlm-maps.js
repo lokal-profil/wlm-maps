@@ -188,7 +188,7 @@ function init() {
     map.on('moveend', whenMapMoves);
 
     askForMonuments('0');
-    map.on('layeradd', onAddLayer);
+    map.on('overlayadd', onAddLayer);
 }
 
 function whenMapMoves(e) {
