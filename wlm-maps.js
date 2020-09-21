@@ -202,9 +202,9 @@ function whenMapMoves(e) {
 
 function onAddLayer(e) {
     console.log(e);
-    if (e.name=='layerMonuments') {
+    if (e.name=='Minnesmärke (med bilder)') {
         askForMonuments('1');
-    } else if (e.name=='layerNopics') {
+    } else if (e.name=='Minnesmärke (utan bilder)') {
         askForMonuments('1');
     }
 }
