@@ -131,7 +131,7 @@ function init() {
         "Minnesmärke (utan bilder)": layerNopics
     };
 
-    L.control.layers(baseLayers, overlays).addTo(map);
+    L.control.layers(overlays, {collapsed: false}).addTo(map);
     var osmOptions = {text: 'Hitta'};
     var osmGeocoder = new L.Control.OSMGeocoder(osmOptions);
     map.addControl(osmGeocoder);
