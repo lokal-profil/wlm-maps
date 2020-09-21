@@ -112,7 +112,7 @@ function init() {
         zoomControl: false,
         center: start,
         zoom: 5,
-        layers: [layerOSM,layerMonuments,layerNopics]
+        layers: [layerOSM,layerNopics]
     });
     map.addControl(
         L.control.zoom({
@@ -138,7 +138,7 @@ function init() {
     var hash = new L.Hash(map);
 
     // locate
-    L.control.locate({
+    var lc = L.control.locate({
         position: 'topleft',  // set the location of the control
         drawCircle: true,  // controls whether a circle is drawn that shows the uncertainty about the location
         icon: 'fa fa-crosshairs',  // class for icon, fa-location-arrow or fa-map-marker
@@ -150,9 +150,13 @@ function init() {
             outsideMapBoundsMsg: "Du verkar befinna dig utanför kartans gränser" // default message for onLocationOutsideMapBounds
         },
         locateOptions :{
-            maxZoom: 16
+            maxZoom: 16,
+            enableHighAccuracy: true
         }
     }).addTo(map);
+
+    // request location update and set location
+    lc.start();
 
     // sidebar
     sidebar = L.control.sidebar('sidebar', {
@@ -181,14 +185,15 @@ function init() {
         ''
         );
 
-    map.on('moveend', whenMapMoves);
+    map.on('moveend', function() {
+        if (map.hasLayer(layerNopics)) {
+            askForMonuments('0');
+        }
+        if (map.hasLayer(layerMonuments)) {
+            askForMonuments('1');
+        }
+    });
     askForMonuments('0');
-    askForMonuments('1');
-}
-
-function whenMapMoves(e) {
-    askForMonuments('0');
-    askForMonuments('1');
 }
 
 function setMarker(feature,latlng) {
