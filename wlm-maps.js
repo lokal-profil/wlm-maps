@@ -188,12 +188,7 @@ function init() {
     map.on('moveend', whenMapMoves);
 
     askForMonuments('0');
-    layerMonuments.on('add', function() {
-        askForMonuments('1');
-    });
-    layerNopics.on('add', function() {
-        askForMonuments('0');
-    });
+    map.on('layeradd', onAddLayer);
 }
 
 function whenMapMoves(e) {
@@ -201,6 +196,14 @@ function whenMapMoves(e) {
         askForMonuments('0');
     }
     if (map.hasLayer(layerMonuments)) {
+        askForMonuments('1');
+    }
+}
+
+function onAddLayer(e) {
+    if (e.name=='layerMonuments') {
+        askForMonuments('1');
+    } else if (e.name=='layerNopics') {
         askForMonuments('1');
     }
 }
