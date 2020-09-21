@@ -201,6 +201,7 @@ function whenMapMoves(e) {
 }
 
 function onAddLayer(e) {
+    console.log(e);
     if (e.name=='layerMonuments') {
         askForMonuments('1');
     } else if (e.name=='layerNopics') {
