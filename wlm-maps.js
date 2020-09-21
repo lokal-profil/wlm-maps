@@ -185,15 +185,24 @@ function init() {
         ''
         );
 
-    map.on('moveend', function() {
-        if (map.hasLayer(layerNopics)) {
-            askForMonuments('0');
-        }
-        if (map.hasLayer(layerMonuments)) {
-            askForMonuments('1');
-        }
-    });
+    map.on('moveend', whenMapMoves);
+
     askForMonuments('0');
+    layerMonuments.on('add', function() {
+        askForMonuments('1');
+    });
+    layerNopics.on('add', function() {
+        askForMonuments('0');
+    });
+}
+
+function whenMapMoves(e) {
+    if (map.hasLayer(layerNopics)) {
+        askForMonuments('0');
+    }
+    if (map.hasLayer(layerMonuments)) {
+        askForMonuments('1');
+    }
 }
 
 function setMarker(feature,latlng) {
